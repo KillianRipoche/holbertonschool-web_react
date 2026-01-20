@@ -1,0 +1,14 @@
+/* Logo en haut de page */
+#logo {
+  width: 200px;
+  height: 200px;
+  background-image: url('../assets/holberton-logo.jpg');
+  background-size: 200px 200px;
+}
+
+/* Compteur affiché à droite du bouton et en gras */
+#count {
+  display: inline;
+  margin-left: 10px;
+  font-weight: bold;
+}
