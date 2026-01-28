@@ -1,0 +1,10 @@
+.notifications {
+	display: flex;
+	justify-content: flex-start;
+	border-style: dotted;
+	border-color: #e1003c;
+}
+
+.notifications P {
+	padding: 0 0 0 1rem;
+}
