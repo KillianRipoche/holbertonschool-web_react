@@ -1,34 +1,32 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from '@testing-library/react'
+import App from './App'
 
-describe('App Component', () => {
-  test('renders School dashboard heading', () => {
+describe('App', () => {
+  test('renders h1 element with School Dashboard text', () => {
     render(<App />);
-    const headingElement = screen.getByRole('heading', {
-      name: /school dashboard/i
-    });
-    expect(headingElement).toBeInTheDocument();
+    const heading = screen.getByRole('heading', { name: /school dashboard/i });
+    expect(heading).toBeInTheDocument();
   });
 
-  test('renders login text in App-body', () => {
+  test('renders correct text content in app-body p element', () => {
     render(<App />);
     const bodyText = screen.getByText(/login to access the full dashboard/i);
     expect(bodyText).toBeInTheDocument();
   });
 
-  test('renders copyright text in App-footer', () => {
+  test('renders correct text content in app-footer p element', () => {
     render(<App />);
-    const footerText = screen.getByText(/copyright \d{4} - holberton school/i);
+    const footerText = screen.getByText(/copyright 2025 - holberton school/i);
     expect(footerText).toBeInTheDocument();
   });
 
-  test('renders an image with alt text', () => {
+  test('renders img element with holberton logo alt text', () => {
     render(<App />);
     const image = screen.getByAltText(/holberton logo/i);
     expect(image).toBeInTheDocument();
   });
 
-  test('renders 2 input elements', () => {
+  test('renders two input elements (one for email and the other for password)', () => {
     render(<App />);
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -36,7 +34,7 @@ describe('App Component', () => {
     expect(passwordInput).toBeInTheDocument();
   });
 
-  test('renders 2 label elements with text Email and Password', () => {
+  test('renders 2 label elements with the text Email and Password', () => {
     render(<App />);
     const emailLabel = screen.getByText(/email/i);
     const passwordLabel = screen.getByText(/password/i);
@@ -44,7 +42,7 @@ describe('App Component', () => {
     expect(passwordLabel).toBeInTheDocument();
   });
 
-  test('renders a button with text OK', () => {
+  test('renders a button with the text OK', () => {
     render(<App />);
     const button = screen.getByRole('button', { name: /ok/i });
     expect(button).toBeInTheDocument();
