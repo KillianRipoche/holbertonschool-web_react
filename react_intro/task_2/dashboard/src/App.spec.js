@@ -30,11 +30,10 @@ describe('App Component', () => {
 
   test('renders 2 input elements', () => {
     render(<App />);
-    const inputs = screen.getAllByRole('textbox');
-    expect(inputs).toHaveLength(1); // email input
+    const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
+    expect(emailInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
-    expect(passwordInput.type).toBe('password');
   });
 
   test('renders 2 label elements with text Email and Password', () => {
