@@ -16,7 +16,7 @@ describe('App', () => {
 
   test('renders correct text content in app-footer p element', () => {
     render(<App />);
-    const footerText = screen.getByText(/copyright 2025 - holberton school/i);
+    const footerText = screen.getByText(/copyright \d{4} - holberton school main dashboard/i);
     expect(footerText).toBeInTheDocument();
   });
 
