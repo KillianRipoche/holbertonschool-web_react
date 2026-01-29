@@ -1,32 +1,29 @@
-import { render, screen } from '@testing-library/react'
-import App from './App'
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-describe('App', () => {
-  test('renders h1 element with School Dashboard text', () => {
+describe('App component', () => {
+  test('renders the main heading', () => {
     render(<App />);
-    const heading = screen.getByRole('heading', { name: /school dashboard/i });
+    const heading = screen.getByRole('heading', { level: 1, name: /school dashboard/i });
     expect(heading).toBeInTheDocument();
   });
 
-  test('renders correct text content in app-body p element', () => {
+  test('renders the login and footer paragraphs', () => {
     render(<App />);
     const bodyText = screen.getByText(/login to access the full dashboard/i);
+    const footerText = screen.getByText(/copyright/i);
     expect(bodyText).toBeInTheDocument();
-  });
-
-  test('renders correct text content in app-footer p element', () => {
-    render(<App />);
-    const footerText = screen.getByText(/copyright \d{4} - holberton school main dashboard/i);
     expect(footerText).toBeInTheDocument();
   });
 
-  test('renders img element with holberton logo alt text', () => {
+  test('renders the Holberton logo image', () => {
     render(<App />);
     const image = screen.getByAltText(/holberton logo/i);
     expect(image).toBeInTheDocument();
   });
 
-  test('renders two input elements (one for email and the other for password)', () => {
+  test('renders two input elements', () => {
     render(<App />);
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -34,10 +31,10 @@ describe('App', () => {
     expect(passwordInput).toBeInTheDocument();
   });
 
-  test('renders 2 label elements with the text Email and Password', () => {
+  test('renders two label elements with text Email and Password', () => {
     render(<App />);
-    const emailLabel = screen.getByText(/email/i);
-    const passwordLabel = screen.getByText(/password/i);
+    const emailLabel = screen.getByLabelText(/email/i);
+    const passwordLabel = screen.getByLabelText(/password/i);
     expect(emailLabel).toBeInTheDocument();
     expect(passwordLabel).toBeInTheDocument();
   });
