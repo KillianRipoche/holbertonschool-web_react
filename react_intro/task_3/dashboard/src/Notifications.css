@@ -1,0 +1,29 @@
+.notifications {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 2px dotted #e1003c;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.notifications p {
+  margin: 0 0 10px 0;
+}
+
+.notifications ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.notifications li {
+  margin: 5px 0;
+}
+
+.notifications li[data-priority="default"] {
+  color: blue;
+}
+
+.notifications li[data-priority="urgent"] {
+  color: red;
+}
