@@ -1,0 +1,38 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+describe('App component', () => {
+  test('renders the main heading', () => {
+    render(<App />);
+    const heading = screen.getByRole('heading', { level: 1, name: /school dashboard/i });
+    expect(heading).toBeInTheDocument();
+  });
+
+  test('renders the login and footer paragraphs', () => {
+    render(<App />);
+    const bodyText = screen.getByText(/login to access the full dashboard/i);
+    const footerText = screen.getByText(/copyright/i);
+    expect(bodyText).toBeInTheDocument();
+    expect(footerText).toBeInTheDocument();
+  });
+
+  test('renders the Holberton logo image', () => {
+    render(<App />);
+    const image = screen.getByAltText(/holberton logo/i);
+    expect(image).toBeInTheDocument();
+  });
+
+  test('renders Login component when isLoggedIn is false', () => {
+    render(<App isLoggedIn={false} />);
+    const loginText = screen.getByText(/login to access the full dashboard/i);
+    expect(loginText).toBeInTheDocument();
+  });
+
+  test('renders CourseList component when isLoggedIn is true', () => {
+    render(<App isLoggedIn={true} />);
+    const courseListTable = screen.getByRole('table');
+    expect(courseListTable).toBeInTheDocument();
+    expect(courseListTable).toHaveAttribute('id', 'CourseList');
+  });
+});
