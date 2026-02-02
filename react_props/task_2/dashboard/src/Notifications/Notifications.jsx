@@ -1,39 +1,44 @@
-import './Notifications.css';
-import closeIcon from '../assets/close-button.png';
-import { getLatestNotification } from '../utils/utils';
+import './Notifications.css'
+import closebtn from '../assets/close-button.png'
+import NotificationItem from './NotificationItem';
 
-function Notifications() {
-  const handleCloseClick = () => {
-    console.log('Close button has been clicked');
-  };
-
+export default function Notifications({ notifications }) {
   return (
-    <div className="notifications">
-      <button
+    <>
+      <div className="notifications">
+        <p>
+        Here is the list of notifications
+        </p>
+        <button
         style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
+          position: "absolute",
+          display: "flex",
+          background: "none",
+          borderStyle: "none",
+          right: "1rem",
+          top: "0.8rem",
+          width: "0.5rem",
+          height: "0.5rem",
         }}
-        aria-label="Close"
-        onClick={handleCloseClick}
-      >
-        <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px' }} />
-      </button>
-      <p>Here is the list of notifications</p>
-      <ul>
-        <li data-priority="default">New course available</li>
-        <li data-priority="urgent">New resume available</li>
-        <li
-          data-priority="urgent"
-          dangerouslySetInnerHTML={{ __html: getLatestNotification() }}
-        ></li>
-      </ul>
-    </div>
+        onClick={() => console.log('Close button has been clicked')} aria-label="Close">
+          <img
+          style={{
+            width: "0.5rem",
+            height: "0.5rem",
+          }}
+          src={ closebtn } alt='CLose' />
+        </button>
+        <ul>
+          {notifications.map((notification) => (
+            <NotificationItem
+            key={notification.id}
+            type={notification.type}
+            value={notification.value}
+            html={notification.html}
+            />
+          ))}
+          </ul>
+      </div>
+    </>
   );
 }
-
-export default Notifications;
