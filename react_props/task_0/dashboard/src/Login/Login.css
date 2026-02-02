@@ -1,0 +1,40 @@
+.App-body {
+  padding: 40px 20px;
+  min-height: 60vh;
+}
+
+.App-body p {
+  font-size: 1.1rem;
+}
+
+.App-body form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.App-body label {
+  font-weight: bold;
+}
+
+.App-body input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.App-body button {
+  padding: 10px 20px;
+  background-color: #e1003c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.App-body button:hover {
+  background-color: #c00034;
+}
