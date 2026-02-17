@@ -1,21 +1,31 @@
+import { render, screen, fireEvent } from "@testing-library/react";
 import NotificationItem from "./NotificationItem";
-import { render, screen } from "@testing-library/react";
 
-test('Check whether the li element has the color blue, and the the attribute data-notification-type set to default', () => {
-  render(<NotificationItem type="default" value="Test notification" />);
-  const li = screen.getByText('Test notification');
+describe('NotificationItem component', () => {
+  test('renders without crashing', () => {
+    render(<NotificationItem type="default" value="test" />);
+  });
 
-  expect(li).toBeInTheDocument();
-  expect(li).toHaveAttribute('data-notification-type', 'default');
-  expect(li).toHaveStyle('color: blue');
-})
+  test('renders default notification with blue color', () => {
+    render(<NotificationItem type="default" value="Test notification" />);
+    const item = screen.getByText('Test notification');
+    expect(item).toHaveAttribute('data-notification-type', 'default');
+    expect(item).toHaveStyle('color: blue');
+  });
 
+  test('renders urgent notification with red color', () => {
+    render(<NotificationItem type="urgent" value="Test urgent notification" />);
+    const item = screen.getByText('Test urgent notification');
+    expect(item).toHaveAttribute('data-notification-type', 'urgent');
+    expect(item).toHaveStyle('color: red');
+  });
 
-test('Check whether the li element has the color red, and the the attribute data-notification-type set to urgent', () => {
-  render(<NotificationItem type="urgent" value="Test urgent notification" />);
-  const li = screen.getByText('Test urgent notification');
-
-  expect(li).toBeInTheDocument();
-  expect(li).toHaveAttribute('data-notification-type', 'urgent');
-  expect(li).toHaveStyle('color: red');
-})
+  test('calls markAsRead when clicked', () => {
+    const markAsRead = jest.fn();
+    render(<NotificationItem type="default" value="Test" id={1} markAsRead={markAsRead} />);
+    const item = screen.getByText('Test');
+    fireEvent.click(item);
+    expect(markAsRead).toHaveBeenCalledTimes(1);
+    expect(markAsRead).toHaveBeenCalledWith(1);
+  });
+});
