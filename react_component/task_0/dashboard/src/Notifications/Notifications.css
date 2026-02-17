@@ -1,0 +1,44 @@
+.notification-title {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.notification-title p {
+  margin: 0;
+}
+
+.notifications {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background-color: white;
+  border-left: 2px dotted #e1003c;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.notifications p {
+  margin: 10px 0;
+}
+
+.notifications ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.notifications li {
+  margin: 10px 0;
+  padding: 10px;
+  border-bottom: 1px solid #e1e1e1;
+}
