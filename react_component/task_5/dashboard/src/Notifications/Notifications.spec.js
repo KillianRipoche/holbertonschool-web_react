@@ -42,4 +42,32 @@ describe('Notifications', () => {
     expect(consoleSpy).toHaveBeenCalledWith('Notification 1 has been marked as read');
     consoleSpy.mockRestore();
   });
+
+  test('does not re-render when notifications length stays the same', () => {
+    const renderSpy = jest.spyOn(Notifications.prototype, 'render');
+    const { rerender } = render(
+      <Notifications displayDrawer={true} notifications={mockNotifications} />
+    );
+    rerender(
+      <Notifications displayDrawer={true} notifications={mockNotifications} />
+    );
+    expect(renderSpy).toHaveBeenCalledTimes(1);
+    renderSpy.mockRestore();
+  });
+
+  test('re-renders when notifications length changes', () => {
+    const renderSpy = jest.spyOn(Notifications.prototype, 'render');
+    const { rerender } = render(
+      <Notifications displayDrawer={true} notifications={mockNotifications} />
+    );
+    const newNotifications = [
+      ...mockNotifications,
+      { id: 4, type: 'default', value: 'New notification' },
+    ];
+    rerender(
+      <Notifications displayDrawer={true} notifications={newNotifications} />
+    );
+    expect(renderSpy).toHaveBeenCalledTimes(2);
+    renderSpy.mockRestore();
+  });
 });
