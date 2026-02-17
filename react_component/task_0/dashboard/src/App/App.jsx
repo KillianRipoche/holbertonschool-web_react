@@ -1,36 +1,46 @@
-import './App.css';
 import React from 'react';
-import { getLatestNotification } from '../utils/utils.js';
-import Notifications from '../Notifications/Notifications.jsx';
-import Header from '../Header/Header.jsx';
-import Login from '../Login/Login.jsx';
-import Footer from '../Footer/Footer.jsx';
-import CourseList from '../CourseList/CourseList.jsx';
+import './App.css';
+import Notifications from '../Notifications/Notifications';
+import Header from '../Header/Header';
+import Login from '../Login/Login';
+import Footer from '../Footer/Footer';
+import CourseList from '../CourseList/CourseList';
+import { getLatestNotification } from '../utils/utils';
 
 class App extends React.Component {
-  render() {
-    const { isLoggedIn = false } = this.props;
-    const notificationsList = [
+  constructor(props) {
+    super(props);
+    this.notificationsList = [
       { id: 1, type: 'default', value: 'New course available' },
       { id: 2, type: 'urgent', value: 'New resume available' },
-      { id: 3, type: 'urgent', html: getLatestNotification() },
+      { id: 3, type: 'urgent', html: { __html: getLatestNotification() } },
     ];
-
-    const coursesList = [
+    this.coursesList = [
       { id: 1, name: 'ES6', credit: 60 },
       { id: 2, name: 'Webpack', credit: 20 },
       { id: 3, name: 'React', credit: 40 },
     ];
+  }
 
-  return (
-    <>
-      <Notifications notifications={notificationsList} />
-      <Header />
-      {isLoggedIn ? <CourseList courses={coursesList} /> : <Login />}
-      <Footer />
-    </>
-  );
+  render() {
+    const { isLoggedIn } = this.props;
+    return (
+      <>
+        <div className="root-notifications">
+          <Notifications displayDrawer={true} notifications={this.notificationsList} />
+        </div>
+        <div className="App">
+          <Header />
+          {isLoggedIn ? <CourseList courses={this.coursesList} /> : <Login />}
+          <Footer />
+        </div>
+      </>
+    );
   }
 }
+
+App.defaultProps = {
+  isLoggedIn: false,
+};
 
 export default App;
