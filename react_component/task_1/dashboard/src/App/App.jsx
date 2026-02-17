@@ -8,6 +8,21 @@ import CourseList from '../CourseList/CourseList'
 import { getLatestNotification } from '../utils/utils'
 
 class App extends React.Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeydown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  handleKeydown = (e) => {
+    if (e.ctrlKey && e.key === 'h') {
+      alert('Logging you out');
+      this.props.logOut();
+    }
+  }
+
   render() {
     const notificationsList = [
       { id: 1, type: 'default', value: 'New course available' },
@@ -25,16 +40,20 @@ class App extends React.Component {
         <div className='root-notifications'>
           <Notifications notifications={notificationsList} />
         </div>
-          <Header />
-          {isLoggedIn ? (
-            <CourseList courses={coursesList} />
-          ) : (
-            <Login />
-          )}
-          <Footer />
+        <Header />
+        {isLoggedIn ? (
+          <CourseList courses={coursesList} />
+        ) : (
+          <Login />
+        )}
+        <Footer />
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default App
+App.defaultProps = {
+  logOut: () => {},
+};
+
+export default App;
