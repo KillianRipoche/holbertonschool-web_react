@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CourseListRow({ isHeader = false, textFirstCell = "", textSecondCell = null }) {
   const bgColor = isHeader ? 'bg-[var(--color-table-header)]' : 'bg-[var(--color-table-rows)]';
-  const opacity = isHeader ? 'opacity-66' : 'opacity-45';
+  const opacity = isHeader ? 'opacity-[0.66]' : 'opacity-[0.45]';
   const borderClass = 'border border-gray-400';
   const paddingClass = isHeader ? '' : 'pl-2';
 
