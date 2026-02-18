@@ -1,17 +1,17 @@
 .App-header {
 	display: flex;
 	align-items: center;
-	padding: 20px;
-	border-bottom: 3px solid #e1003c;
-}
-
-.App-header img {
-	width: 200px;
-	height: auto;
+	padding: 1rem;
+	border-bottom-style: solid;
+	border-color: #e1003c;
 }
 
 .App-header h1 {
-	color: #e1003c;
-	margin-left: 20px;
-	font-size: 2rem;
+	display: flex;
+	font-weight: bold;
+}
+
+.App-header img {
+	display: flex;
+	width: 150px;
 }
