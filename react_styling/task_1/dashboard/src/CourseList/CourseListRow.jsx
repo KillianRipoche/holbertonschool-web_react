@@ -4,7 +4,6 @@ export default function CourseListRow({ isHeader = false, textFirstCell = "", te
   const bgColor = isHeader ? 'bg-[var(--color-table-header)]' : 'bg-[var(--color-table-rows)]';
   const opacity = isHeader ? 'opacity-[0.66]' : 'opacity-[0.45]';
   const borderClass = 'border border-gray-400';
-  const paddingClass = isHeader ? '' : 'pl-2';
 
   return (
     <tr className={`${bgColor} ${opacity}`}>
@@ -15,20 +14,20 @@ export default function CourseListRow({ isHeader = false, textFirstCell = "", te
           </th>
         ) : (
           <>
-            <th className={`${borderClass} py-2 ${paddingClass}`} style={{ width: '70%' }}>
+            <th className={`${borderClass} py-2`} style={{ width: '70%' }}>
               {textFirstCell}
             </th>
-            <th className={`${borderClass} py-2 ${paddingClass}`}>
+            <th className={`${borderClass} py-2`}>
               {textSecondCell}
             </th>
           </>
         )
       ) : (
         <>
-          <td className={`${borderClass} py-2 ${paddingClass}`}>
+          <td className={`${borderClass} py-2 pl-2`}>
             {textFirstCell}
           </td>
-          <td className={`${borderClass} py-2 ${paddingClass}`}>
+          <td className={`${borderClass} py-2 pl-2`}>
             {textSecondCell}
           </td>
         </>
