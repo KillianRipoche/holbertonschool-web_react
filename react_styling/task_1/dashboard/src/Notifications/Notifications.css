@@ -1,0 +1,47 @@
+.root-notifications {
+	display: flex;
+	position: absolute;
+	flex-direction: column;
+	right: 0;
+	padding-right: 1rem;
+	min-width: 30rem;
+}
+
+.notifications {
+	display: block;
+	flex-direction: column;
+	border-style: dotted;
+	border-color: #e1003c;
+}
+
+.notifications P {
+	margin: auto;
+}
+
+li {
+	color: #e1003c;
+}
+
+li[data-notification-type="default"] {
+	color: blue;
+}
+
+.notifications button {
+	position: absolute;
+	display: flex;
+	background: none;
+	border-style: none;
+	right: 1.5rem;
+	top: 3.5rem;
+}
+
+.notifications button,
+.notifications img {
+	width: 0.5rem;
+	height: 0.5rem;
+}
+
+.notifications-title {
+	display: flex;
+	justify-content: end;
+}
