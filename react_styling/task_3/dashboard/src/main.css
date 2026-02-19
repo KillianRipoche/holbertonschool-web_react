@@ -1,43 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --font-family: "Roboto", sans-serif;
-  --color-table-header: #deb5b5;
-  --color-table-rows: #CDCDCD;
   --main-color: #e1003c;
   --default-notification-item: blue;
   --urgent-notification-item: red;
-}
-
-@layer utilities {
-  .bg-table-header {
-    background-color: var(--color-table-header);
-  }
-  .bg-table-rows {
-    background-color: var(--color-table-rows);
-  }
-  .opacity-66 {
-    opacity: 0.66;
-  }
-  .opacity-45 {
-    opacity: 0.45;
-  }
-  .text-default-notification {
-    color: var(--default-notification-item);
-  }
-  .text-urgent-notification {
-    color: var(--urgent-notification-item);
-  }
-  .border-main-color {
-    border-color: var(--main-color);
-  }
-  .text-main-color {
-    color: var(--main-color);
-  }
+  --color-table-header: #deb5b5;
+  --color-table-rows: #CDCDCD;
+  --font-roboto: "Roboto", system-ui, sans-serif;
 }
 
 @layer base {
-  body {
-    font-family: var(--font-family);
+  html {
+    font-family: var(--font-roboto);
   }
 }

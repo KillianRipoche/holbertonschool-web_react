@@ -1,19 +1,18 @@
-import React from 'react'
-
-export default function CourseListRow({ isHeader = false, textFirstCell = '', textSecondCell = null }) {
+export default function CourseListRow({
+  isHeader = false,
+  textFirstCell = '',
+  textSecondCell = null
+}) {
   return (
-    <tr className={isHeader ? 'bg-table-header opacity-66' : 'bg-table-rows opacity-45'}>
+    <tr className={isHeader
+      ? "bg-[color-mix(in_srgb,var(--color-table-header)_66%,transparent)]"
+      : "bg-[color-mix(in_srgb,var(--color-table-rows)_45%,transparent)]"
+    }>
       {isHeader ? (
-        textSecondCell === null ? (
-          <th colSpan="2" className="border border-gray-400">
-            {textFirstCell}
-          </th>
-        ) : (
-          <>
-            <th className="border border-gray-400">{textFirstCell}</th>
-            <th className="border border-gray-400">{textSecondCell}</th>
-          </>
-        )
+        <>
+          <th className="border border-gray-400" colSpan={textSecondCell ? 1 : 2}>{textFirstCell}</th>
+          {textSecondCell && <th className="border border-gray-400">{textSecondCell}</th>}
+        </>
       ) : (
         <>
           <td className="border border-gray-400 pl-2">{textFirstCell}</td>

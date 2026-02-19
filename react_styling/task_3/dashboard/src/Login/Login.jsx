@@ -2,17 +2,18 @@ import WithLogging from '../HOC/WithLogging';
 
 function Login() {
   return (
-    <div className="App-body p-10 min-h-[60vh] border-t-[3px] border-main-color">
-      <p className="text-lg mb-5">Login to access the full dashboard</p>
-      <form className="flex flex-col gap-2.5 max-w-xs">
-        <label htmlFor="email" className="font-bold">Email:</label>
-        <input type="email" id="email" name="email" className="p-2 border border-gray-300 rounded" />
-        <label htmlFor="password" className="font-bold">Password:</label>
-        <input type="password" id="password" name="password" className="p-2 border border-gray-300 rounded" />
-        <button type="button" className="py-2.5 px-5 bg-[var(--main-color)] text-white border-none rounded cursor-pointer font-bold hover:bg-[#c00034]">OK</button>
-      </form>
+    <div className="App-body flex flex-col p-5 pl-10 h-[45vh] border-t-4 border-[color:var(--main-color)]">
+      <p className="text-xl">Login to access the full dashboard</p>
+      <div className="mt-8 text-lg">
+        <label htmlFor="email" className="pr-2">Email</label>
+        <input type="email" name="user_email" id="email" className="border rounded" />
+        <label htmlFor="password" className="pl-2 pr-2">Password</label>
+        <input type="password" name="user_password" id="password" className="border rounded" />
+        <button className="cursor-pointer border px-1 rounded ml-2">OK</button>
+      </div>
     </div>
   );
 }
 
-export default WithLogging(Login);
+const LoginWithLogging = WithLogging(Login)
+export default LoginWithLogging;
