@@ -1,0 +1,10 @@
+.App-body {
+	display: block;
+	justify-content: flex-start;
+	padding: 0.5rem;
+	flex: 1;
+  }
+
+  .App-body input {
+	margin: 0 0.5rem 0;
+  }
