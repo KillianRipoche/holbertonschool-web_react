@@ -1,59 +1,55 @@
-import React from 'react';
-import closebtn from '../assets/close-button.png';
-import NotificationItem from './NotificationItem';
+import NotificationItem from './NotificationItem'
+import React from 'react'
 
 class Notifications extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.notifications.length !== this.props.notifications.length;
+  constructor(props) {
+    super(props)
+    this.markAsRead = this.markAsRead.bind(this)
   }
 
   markAsRead(id) {
-    console.log(`Notification ${id} has been marked as read`);
+    console.log(`Notification ${id} has been marked as read`)
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.notifications.length !== this.props.notifications.length || nextProps.displayDrawer !== this.props.displayDrawer
   }
 
   render() {
-    const { displayDrawer, notifications } = this.props;
+    const { notifications, displayDrawer = true } = this.props
 
     return (
       <>
-        <div className="notification-title fixed top-0 right-0 p-2 bg-white cursor-pointer font-bold">
-          <p className="m-0">Your notifications</p>
+        <div className="flex flex-col items-end space-y-2 pr-4">
+          <p className="text-base font-medium">Your notifications</p>
+          {displayDrawer && (
+            <div className="relative max-w-md border-2 border-dashed border-main px-6 py-4">
+              {notifications.length > 0 ? (
+                <>
+                  <p className="mb-4 text-sm font-medium">Here is the list of notifications</p>
+                  <button
+                    type="button"
+                    className="absolute right-4 top-3 text-lg leading-none transition hover:text-main focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main"
+                    onClick={() => console.log('Close button has been clicked')}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <ul className="space-y-3">
+                    {notifications.map(notification => (
+                      <NotificationItem key={notification.id} type={notification.type} value={notification.value} html={notification.html} markAsRead={() => this.markAsRead(notification.id)} />
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p className="text-sm">No new notification for now</p>
+              )}
+            </div>
+          )}
         </div>
-        {displayDrawer && (
-          <div className="notifications fixed top-0 right-0 w-1/4 h-screen bg-white border-2 border-dashed border-main-color p-1.5 flex flex-col overflow-y-auto z-[1000]">
-            <button
-              className="absolute top-2 right-4 bg-transparent border-none cursor-pointer"
-              onClick={() => console.log('Close button has been clicked')}
-              aria-label="Close"
-            >
-              <img
-                className="w-2 h-2"
-                src={closebtn}
-                alt='Close'
-              />
-            </button>
-            <p className="my-2">Here is the list of notifications</p>
-            {notifications.length === 0 ? (
-              <p>No new notification for now</p>
-            ) : (
-              <ul className="m-0 p-0 list-none">
-                {notifications.map((notification) => (
-                  <NotificationItem
-                    key={notification.id}
-                    id={notification.id}
-                    type={notification.type}
-                    value={notification.value}
-                    html={notification.html}
-                    markAsRead={this.markAsRead}
-                  />
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
       </>
-    );
+    )
   }
 }
 
-export default Notifications;
+export default Notifications
