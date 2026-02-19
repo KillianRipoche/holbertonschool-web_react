@@ -1,8 +1,6 @@
 import React from 'react';
-import './Notifications.css';
 import closebtn from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
-import PropTypes from 'prop-types';
 
 class Notifications extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -18,36 +16,27 @@ class Notifications extends React.Component {
 
     return (
       <>
-        <div className="notification-title">
-          <p>Your notifications</p>
+        <div className="notification-title fixed top-0 right-0 p-2 bg-white cursor-pointer font-bold">
+          <p className="m-0">Your notifications</p>
         </div>
         {displayDrawer && (
-          <div className="notifications">
+          <div className="notifications fixed top-0 right-0 w-1/4 h-screen bg-white border-2 border-dashed border-main-color p-1.5 flex flex-col overflow-y-auto z-[1000]">
             <button
-              style={{
-                position: "absolute",
-                display: "flex",
-                background: "none",
-                borderStyle: "none",
-                right: "1rem",
-                top: "0.8rem",
-                width: "0.5rem",
-                height: "0.5rem",
-              }}
+              className="absolute top-2 right-4 bg-transparent border-none cursor-pointer"
               onClick={() => console.log('Close button has been clicked')}
               aria-label="Close"
             >
               <img
-                style={{ width: "0.5rem", height: "0.5rem" }}
+                className="w-2 h-2"
                 src={closebtn}
                 alt='Close'
               />
             </button>
-            <p>Here is the list of notifications</p>
+            <p className="my-2">Here is the list of notifications</p>
             {notifications.length === 0 ? (
               <p>No new notification for now</p>
             ) : (
-              <ul>
+              <ul className="m-0 p-0 list-none">
                 {notifications.map((notification) => (
                   <NotificationItem
                     key={notification.id}
@@ -66,22 +55,5 @@ class Notifications extends React.Component {
     );
   }
 }
-
-Notifications.propTypes = {
-  displayDrawer: PropTypes.bool,
-  notifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      type: PropTypes.string.isRequired,
-      value: PropTypes.string,
-      html: PropTypes.shape({ __html: PropTypes.string }),
-    })
-  ),
-};
-
-Notifications.defaultProps = {
-  displayDrawer: false,
-  notifications: [],
-};
 
 export default Notifications;

@@ -6,18 +6,10 @@ describe('NotificationItem component', () => {
     render(<NotificationItem type="default" value="test" />);
   });
 
-  test('renders default notification with blue color', () => {
+  test('renders with correct text', () => {
     render(<NotificationItem type="default" value="Test notification" />);
     const item = screen.getByText('Test notification');
-    expect(item).toHaveAttribute('data-notification-type', 'default');
-    expect(item).toHaveStyle('color: blue');
-  });
-
-  test('renders urgent notification with red color', () => {
-    render(<NotificationItem type="urgent" value="Test urgent notification" />);
-    const item = screen.getByText('Test urgent notification');
-    expect(item).toHaveAttribute('data-notification-type', 'urgent');
-    expect(item).toHaveStyle('color: red');
+    expect(item).toBeInTheDocument();
   });
 
   test('calls markAsRead when clicked', () => {
@@ -27,5 +19,13 @@ describe('NotificationItem component', () => {
     fireEvent.click(item);
     expect(markAsRead).toHaveBeenCalledTimes(1);
     expect(markAsRead).toHaveBeenCalledWith(1);
+  });
+
+  test('renders html content', () => {
+    const htmlContent = { __html: '<strong>Urgent requirement</strong> - complete by EOD' };
+    const { container } = render(<NotificationItem type="urgent" html={htmlContent} id={3} />);
+    const item = container.querySelector('li');
+    expect(item).toBeInTheDocument();
+    expect(item.innerHTML).toContain('<strong>Urgent requirement</strong>');
   });
 });

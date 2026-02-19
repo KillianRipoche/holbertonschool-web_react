@@ -52,7 +52,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <div className='root-notifications'>
-          <Notifications notifications={notificationsList} />
+          <Notifications displayDrawer={true} notifications={notificationsList} />
         </div>
           <Header />
           {isLoggedIn ? (
