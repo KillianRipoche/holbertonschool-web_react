@@ -31,6 +31,9 @@
   .border-main-color {
     border-color: var(--main-color);
   }
+  .text-main-color {
+    color: var(--main-color);
+  }
 }
 
 @layer base {

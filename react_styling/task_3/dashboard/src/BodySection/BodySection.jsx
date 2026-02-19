@@ -4,8 +4,8 @@ class BodySection extends React.Component {
   render() {
     const { title, children } = this.props;
     return (
-      <div className="bodySection">
-        <h2>{title}</h2>
+      <div className="bodySection p-5">
+        <h2 className="text-2xl font-bold mb-4">{title}</h2>
         {children}
       </div>
     );
