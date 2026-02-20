@@ -1,34 +1,47 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react'
+import { getLatestNotification } from '../utils/utils'
 
-export default class NotificationItem extends PureComponent {
+class NotificationItem extends PureComponent {
+  static defaultProps = {
+    markAsRead: () => { },
+    type: "default",
+    html: "",
+    value: "",
+    id: 1
+  }
+
   render() {
-    const { type, html, value, markAsRead, id } = this.props;
-    
-    if (type === 'default') {
+    const { markAsRead, type, html, value, id } = this.props
+    const innerHtml = { __html: getLatestNotification() }
+    if (type === "default")
       return (
-        <li
-          className="text-[color:var(--default-notification-item)] pl-1"
+        <li onClick={() => markAsRead(id)}
           data-notification-type={type}
-          onClick={() => markAsRead(id)}
-        >{value}</li>
-      );
-    } else if (type === 'urgent' && html !== undefined) {
+          className="text-[color:var(--default-notification-item)] pl-1">
+          {value}
+        </li>
+      )
+    else if (type === "urgent" && html) {
       return (
         <li
+          onClick={() => markAsRead(id)}
+          data-notification-type={type}
+          dangerouslySetInnerHTML={innerHtml}
+          className="text-[color:var(--urgent-notification-item)] pl-1">
+        </li>
+      )
+    }
+    else if (type === "urgent") {
+      return (
+        <li
+          onClick={() => markAsRead(id)}
+          data-notification-type={type}
           className="text-[color:var(--urgent-notification-item)] pl-1"
-          data-notification-type={type}
-          dangerouslySetInnerHTML={html}
-          onClick={() => markAsRead(id)}
-        ></li>
-      );
-    } else {
-      return (
-        <li
-          className="text-[color:var(--urgent-notification-item)] pl-1"
-          data-notification-type={type}
-          onClick={() => markAsRead(id)}
-        >{value}</li>
-      );
+        >
+          {value}
+        </li>
+      )
     }
   }
 }
+export default NotificationItem

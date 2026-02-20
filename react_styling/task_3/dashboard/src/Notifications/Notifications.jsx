@@ -1,63 +1,55 @@
-import React from 'react';
-import closeIcon from '../assets/close-icon.png';
-import NotificationItem from './NotificationItem';
+import React from 'react'
+import NotificationItem from './NotificationItem'
+import closeButton from '../assets/close-button.png'
 
-export default class Notifications extends React.Component {
-  constructor(props) {
-    super(props)
+class Notifications extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.notifications.length !== this.props.notifications.length) {
+      return true
+    }
+    return false
   }
-
-  markAsRead = (id) => {
-    console.log(`Notification ${id + 1} has been marked as read`);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      this.props.notifications.length !== nextProps.notifications.length ||
-      this.props.displayDrawer !== nextProps.displayDrawer
-    );
+  markAsRead(id) {
+    console.log(`Notification ${id} has been marked as read`)
   }
 
   render() {
-    const { notifications = [], displayDrawer = true } = this.props;
-
+    const { displayDrawer = false, notifications = [] } = this.props
     return (
-      <div className="w-full">
-        <div className="notification-title text-right pr-3 pt-1">Your notifications</div>
-        {
-          displayDrawer ? (
-            <div className='notification-items relative border-[3px] border-dotted border-[color:var(--main-color)] w-100 p-2 right-3 float-right mt-1'>
-              {notifications.length > 0 ? (
-                <div className='relative'>
-                  <p className="m-0">Here is the list of notifications</p>
-                  <button
-                    onClick={() => console.log('Close button has been clicked')}
-                    aria-label='Close'
-                    className="absolute cursor-pointer right-0 top-0 bg-transparent"
-                  >
-                    <img src={closeIcon} alt='close icon' className="w-3 h-3" />
+      <>
+        <div className="notification-title absolute right-3 top-1">Your notifications</div>
+        {displayDrawer && (
+          <div className="notification-items relative border-[3px] border-dotted border-[color:var(--main-color)] p-1.5 w-1/4 float-right mt-7">
+            {notifications.length === 0 ? (
+              <p>No new notification for now</p>
+            ) : (
+              <>
+                <div className="relative">
+                  <p className='m-0'>Here is the list of notifications</p>
+                  <button className="absolute cursor-pointer right-0 top-0 bg-transparent"
+                    onClick={() => console.log("Close button has been clicked")}
+                    aria-label='Close'>
+                    <img src={closeButton} alt="close-button" className="w-3 h-3" />
                   </button>
                   <ul className='list-[square] pl-5'>
-                    {notifications.map((notification, index) => (
+                    {notifications.map((notification) => (
                       <NotificationItem
-                        id={index}
                         key={notification.id}
                         type={notification.type}
                         value={notification.value}
                         html={notification.html}
                         markAsRead={this.markAsRead}
+                        id={notification.id}
                       />
                     ))}
                   </ul>
                 </div>
-              ) : (
-                <p>No new notification for now</p>
-              )}
-            </div>
-          ) :
-          ([])
-        }
-      </div>
-    );
+              </>
+            )}
+          </div>
+        )}
+      </>
+    )
   }
 }
+export default Notifications
