@@ -52,7 +52,7 @@ class App extends React.Component {
 
     return (
       <>
-        <div className="relative px-3 min-h-screen">
+        <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
           <Notifications notifications={notificationsList} displayDrawer={true} />
           <div className="flex-1">
             <Header />
@@ -68,7 +68,7 @@ class App extends React.Component {
             }
             <BodySection title="News from the School">
               <p>
-                Holberton School News goes here
+                ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?
               </p>
             </BodySection>
           </div>

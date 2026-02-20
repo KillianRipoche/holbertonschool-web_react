@@ -10,7 +10,7 @@ class CourseList extends React.Component {
     const { courses } = this.props
     if (courses.length === 0) {
       return (
-        <div className="w-4/5 mx-auto my-32 w-4/5 h-[29vh]">
+        <div className="w-4/5 mx-auto my-32 h-[29vh] max-[912px]:w-full max-[912px]:my-5">
           <table id="CourseList" className="w-full border-collapse border border-gray-500">
             <thead>
               <CourseListRow textFirstCell="No course available yet" isHeader={true} />
@@ -20,7 +20,7 @@ class CourseList extends React.Component {
       )
     } else {
       return (
-        <div className="w-4/5 mx-auto my-32 w-4/5 h-[29vh]">
+        <div className="w-4/5 mx-auto my-32 h-[29vh] max-[912px]:w-full max-[912px]:my-5">
           <table id="CourseList" className="w-full border-collapse border border-gray-500">
             <thead>
               <CourseListRow textFirstCell="Available courses" isHeader={true} />
