@@ -15,9 +15,16 @@ class Notifications extends React.Component {
 
   render() {
     const { displayDrawer = false, notifications = [] } = this.props
+
+    // Condition pour l'animation bounce
+    const shouldAnimate = notifications.length > 0 && !displayDrawer
+    const animationClass = shouldAnimate ? 'animate-bounce' : ''
+
     return (
       <>
-        <div className="notification-title absolute right-3 top-1">Your notifications</div>
+        <div className={`notification-title absolute right-3 top-1 ${animationClass}`}>
+          Your notifications
+        </div>
         {displayDrawer && (
           <div className="notification-items relative border-[3px] border-dotted border-[color:var(--main-color)] p-1.5 w-1/4 float-right mt-7 max-[912px]:fixed max-[912px]:inset-0 max-[912px]:w-full max-[912px]:h-full max-[912px]:bg-white max-[912px]:z-[1000] max-[912px]:p-3 max-[912px]:border-none max-[912px]:float-none max-[912px]:mt-0">
             {notifications.length === 0 ? (
