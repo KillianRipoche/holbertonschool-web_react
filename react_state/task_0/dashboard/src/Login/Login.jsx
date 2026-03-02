@@ -38,8 +38,14 @@ class Login extends React.Component {
   validateForm() {
     const { email, password } = this.state
 
-    // Email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    // Check if fields are not empty
+    if (!email || !password) {
+      this.setState({ enableSubmit: false })
+      return
+    }
+
+    // Email validation regex (more strict)
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     const isEmailValid = emailRegex.test(email)
 
     // Password must be at least 8 characters
@@ -62,7 +68,7 @@ class Login extends React.Component {
             <label htmlFor="email" className="pr-2 max-[912px]:flex max-[912px]:flex-col">
               Email:
               <input
-                type="email"
+                type="text"
                 name="email"
                 id="email"
                 value={email}
