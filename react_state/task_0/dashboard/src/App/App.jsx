@@ -7,17 +7,14 @@ import LoginWithLogging from '../Login/Login'
 import Footer from '../Footer/Footer'
 import CourseListWithLogging from '../CourseList/CourseList'
 import { getLatestNotification } from '../utils/utils'
-
+import PropTypes from 'prop-types'
 
 class App extends React.Component {
-  static defaultProps = {
-    isLoggedIn: false,
-    logOut: () => { }
-  }
   constructor(props) {
     super(props)
 
     this.state = {
+      displayDrawer: false,
       notificationsList: [
         { id: 1, type: "default", value: "New course available" },
         { id: 2, type: "urgent", value: "New resume available" },
@@ -29,6 +26,23 @@ class App extends React.Component {
         { id: 3, name: "React", credit: 40 }
       ]
     }
+
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this)
+    this.handleHideDrawer = this.handleHideDrawer.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  static defaultProps = {
+    isLoggedIn: false,
+    logOut: () => { }
+  }
+
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true })
+  }
+
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false })
   }
 
   handleLogout = (event) => {
@@ -48,12 +62,17 @@ class App extends React.Component {
 
   render() {
     const { isLoggedIn = false } = this.props
-    const { notificationsList, coursesList } = this.state
+    const { displayDrawer, notificationsList, coursesList } = this.state
 
     return (
       <>
         <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
-          <Notifications notifications={notificationsList} displayDrawer={true} />
+          <Notifications
+            notifications={notificationsList}
+            displayDrawer={displayDrawer}
+            handleDisplayDrawer={this.handleDisplayDrawer}
+            handleHideDrawer={this.handleHideDrawer}
+          />
           <div className="flex-1">
             <Header />
             {isLoggedIn ? (
@@ -78,4 +97,12 @@ class App extends React.Component {
     )
   }
 }
+
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+  logOut: PropTypes.func,
+}
+
+
 export default App

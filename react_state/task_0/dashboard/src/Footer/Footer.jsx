@@ -1,4 +1,5 @@
 import { getCurrentYear, getFooterCopy } from '../utils/utils'
+import PropTypes from 'prop-types';
 
 function Footer({ isIndex = false }) {
   const currentYear = getCurrentYear()
@@ -11,6 +12,10 @@ function Footer({ isIndex = false }) {
       </div>
     </>
   )
+}
+
+Footer.propTypes = {
+  isIndex: PropTypes.bool,
 }
 
 export default Footer

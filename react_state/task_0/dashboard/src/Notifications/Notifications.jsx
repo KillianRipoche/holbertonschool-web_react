@@ -1,20 +1,21 @@
 import React from 'react'
 import NotificationItem from './NotificationItem'
 import closeButton from '../assets/close-button.png'
+import PropTypes from 'prop-types'
 
 class Notifications extends React.Component {
   shouldComponentUpdate(nextProps) {
-    if (nextProps.notifications.length !== this.props.notifications.length) {
-      return true
-    }
-    return false
+    // Allow re-render if displayDrawer changes or notifications length changes
+    return nextProps.notifications.length !== this.props.notifications.length ||
+           nextProps.displayDrawer !== this.props.displayDrawer
   }
+
   markAsRead(id) {
     console.log(`Notification ${id} has been marked as read`)
   }
 
   render() {
-    const { displayDrawer = false, notifications = [] } = this.props
+    const { displayDrawer, notifications, handleDisplayDrawer, handleHideDrawer } = this.props
 
     // Condition pour l'animation bounce
     const shouldAnimate = notifications.length > 0 && !displayDrawer
@@ -22,7 +23,10 @@ class Notifications extends React.Component {
 
     return (
       <>
-        <div className={`notification-title absolute right-3 top-1 ${animationClass}`}>
+        <div
+          className={`notification-title absolute right-3 top-1 cursor-pointer ${animationClass}`}
+          onClick={handleDisplayDrawer}
+        >
           Your notifications
         </div>
         {displayDrawer && (
@@ -33,9 +37,11 @@ class Notifications extends React.Component {
               <>
                 <div className="relative">
                   <p className='m-0'>Here is the list of notifications</p>
-                  <button className="absolute cursor-pointer right-0 top-0 bg-transparent"
-                    onClick={() => console.log("Close button has been clicked")}
-                    aria-label='Close'>
+                  <button
+                    className="absolute cursor-pointer right-0 top-0 bg-transparent border-none"
+                    onClick={handleHideDrawer}
+                    aria-label='Close'
+                  >
                     <img src={closeButton} alt="close-button" className="w-3 h-3" />
                   </button>
                   <ul className='list-[square] pl-5 max-[912px]:list-none max-[912px]:pl-0'>
@@ -59,4 +65,19 @@ class Notifications extends React.Component {
     )
   }
 }
+
+Notifications.propTypes = {
+  displayDrawer: PropTypes.bool,
+  notifications: PropTypes.array,
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
+}
+
+Notifications.defaultProps = {
+  displayDrawer: false,
+  notifications: [],
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
+}
+
 export default Notifications

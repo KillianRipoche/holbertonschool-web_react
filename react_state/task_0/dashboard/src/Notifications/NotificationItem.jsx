@@ -1,5 +1,6 @@
 import { PureComponent } from 'react'
 import { getLatestNotification } from '../utils/utils'
+import PropTypes from 'prop-types';
 
 class NotificationItem extends PureComponent {
   static defaultProps = {
@@ -46,4 +47,13 @@ class NotificationItem extends PureComponent {
     }
   }
 }
+
+NotificationItem.propTypes = {
+  markAsRead: PropTypes.func,
+  type: PropTypes.string,
+  html: PropTypes.object,
+  value: PropTypes.string,
+  id: PropTypes.number,
+}
+
 export default NotificationItem
