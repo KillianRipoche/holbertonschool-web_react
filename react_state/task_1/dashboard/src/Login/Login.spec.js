@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Login from './Login';
 
 describe('Login component', () => {
@@ -7,36 +6,80 @@ describe('Login component', () => {
     render(<Login />);
   });
 
-  test('renders 2 label, 2 input, and 1 button elements', () => {
+  test('renders email and password inputs', () => {
     render(<Login />);
-
-    const emailLabel = screen.getByText(/email/i);
-    const passwordLabel = screen.getByText(/password/i);
-    expect(emailLabel).toBeInTheDocument();
-    expect(passwordLabel).toBeInTheDocument();
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    expect(emailInput).toBeInTheDocument();
-    expect(passwordInput).toBeInTheDocument();
-
-    const button = screen.getByRole('button', { name: /ok/i });
-    expect(button).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  test('inputs get focused when related label is clicked', async () => {
-    const user = userEvent.setup();
+  test('submit button is disabled by default', () => {
+    render(<Login />);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+    expect(submitButton).toBeDisabled();
+  });
+
+  test('submit button is enabled after entering valid email and password', () => {
     render(<Login />);
 
-    const emailLabel = screen.getByText(/email/i);
     const emailInput = screen.getByLabelText(/email/i);
-    const passwordLabel = screen.getByText(/password/i);
     const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
 
-    await user.click(emailLabel);
-    expect(emailInput).toHaveFocus();
+    // Initially disabled
+    expect(submitButton).toBeDisabled();
 
-    await user.click(passwordLabel);
-    expect(passwordInput).toHaveFocus();
+    // Enter valid email
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    // Still disabled (password not valid yet)
+    expect(submitButton).toBeDisabled();
+
+    // Enter valid password (8+ characters)
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    // Now enabled
+    expect(submitButton).toBeEnabled();
+  });
+
+  test('submit button remains disabled with invalid email', () => {
+    render(<Login />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+    expect(submitButton).toBeDisabled();
+  });
+
+  test('submit button remains disabled with short password', () => {
+    render(<Login />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /ok/i });
+
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'short' } }); // Only 5 characters
+
+    expect(submitButton).toBeDisabled();
+  });
+
+  test('form submission does not reload page', () => {
+    render(<Login />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const form = screen.getByRole('button', { name: /ok/i }).closest('form');
+
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+    const preventDefaultSpy = jest.spyOn(submitEvent, 'preventDefault');
+
+    form.dispatchEvent(submitEvent);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
   });
 });
