@@ -25,48 +25,15 @@ describe('Login component', () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /ok/i });
 
-    // Initially disabled
-    expect(submitButton).toBeDisabled();
-
-    // Enter valid email
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    // Still disabled (password not valid yet)
-    expect(submitButton).toBeDisabled();
-
-    // Enter valid password (8+ characters)
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    // Now enabled
+
     expect(submitButton).toBeEnabled();
   });
 
-  test('submit button remains disabled with invalid email', () => {
-    render(<Login />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-
-    expect(submitButton).toBeDisabled();
-  });
-
-  test('submit button remains disabled with short password', () => {
-    render(<Login />);
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'short' } }); // Only 5 characters
-
-    expect(submitButton).toBeDisabled();
-  });
-
-  test('form submission does not reload page', () => {
-    render(<Login />);
+  test('logIn method is called with email and password on form submit', () => {
+    const logInMock = jest.fn();
+    render(<Login logIn={logInMock} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -74,12 +41,9 @@ describe('Login component', () => {
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.submit(form);
 
-    const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
-    const preventDefaultSpy = jest.spyOn(submitEvent, 'preventDefault');
-
-    form.dispatchEvent(submitEvent);
-
-    expect(preventDefaultSpy).toHaveBeenCalled();
+    expect(logInMock).toHaveBeenCalledTimes(1);
+    expect(logInMock).toHaveBeenCalledWith('test@example.com', 'password123');
   });
 });

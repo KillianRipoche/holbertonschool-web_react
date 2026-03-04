@@ -3,10 +3,11 @@ import BodySection from '../BodySection/BodySection'
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom'
 import Notifications from '../Notifications/Notifications'
 import Header from '../Header/Header'
-import LoginWithLogging from '../Login/Login'
+import Login from '../Login/Login'
 import Footer from '../Footer/Footer'
 import CourseListWithLogging from '../CourseList/CourseList'
 import { getLatestNotification } from '../utils/utils'
+import AppContext from '../Context/context'
 import PropTypes from 'prop-types'
 
 class App extends React.Component {
@@ -15,6 +16,11 @@ class App extends React.Component {
 
     this.state = {
       displayDrawer: false,
+      user: {
+        email: '',
+        password: '',
+        isLoggedIn: false,
+      },
       notificationsList: [
         { id: 1, type: "default", value: "New course available" },
         { id: 2, type: "urgent", value: "New resume available" },
@@ -30,11 +36,8 @@ class App extends React.Component {
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this)
     this.handleHideDrawer = this.handleHideDrawer.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
-  }
-
-  static defaultProps = {
-    isLoggedIn: false,
-    logOut: () => { }
+    this.logIn = this.logIn.bind(this)
+    this.logOut = this.logOut.bind(this)
   }
 
   handleDisplayDrawer() {
@@ -45,10 +48,30 @@ class App extends React.Component {
     this.setState({ displayDrawer: false })
   }
 
+  logIn(email, password) {
+    this.setState({
+      user: {
+        email: email,
+        password: password,
+        isLoggedIn: true,
+      }
+    })
+  }
+
+  logOut() {
+    this.setState({
+      user: {
+        email: '',
+        password: '',
+        isLoggedIn: false,
+      }
+    })
+  }
+
   handleLogout = (event) => {
     if (event.ctrlKey && event.key === "h") {
       alert('Logging you out')
-      this.props.logOut()
+      this.logOut()
     }
   }
 
@@ -61,11 +84,14 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoggedIn = false } = this.props
-    const { displayDrawer, notificationsList, coursesList } = this.state
+    const { displayDrawer, user, notificationsList, coursesList } = this.state
+    const contextValue = {
+      user: user,
+      logOut: this.logOut,
+    }
 
     return (
-      <>
+      <AppContext.Provider value={contextValue}>
         <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
           <Notifications
             notifications={notificationsList}
@@ -75,13 +101,13 @@ class App extends React.Component {
           />
           <div className="flex-1">
             <Header />
-            {isLoggedIn ? (
+            {user.isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
                 <CourseListWithLogging courses={coursesList} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title="Log in to continue">
-                <LoginWithLogging />
+                <Login logIn={this.logIn} />
               </BodySectionWithMarginBottom>
             )
             }
@@ -93,16 +119,9 @@ class App extends React.Component {
           </div>
           <Footer />
         </div>
-      </>
+      </AppContext.Provider>
     )
   }
 }
-
-
-App.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  logOut: PropTypes.func,
-}
-
 
 export default App

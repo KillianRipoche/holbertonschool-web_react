@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Login extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      isLoggedIn: false,
       email: '',
       password: '',
       enableSubmit: false,
@@ -18,7 +18,8 @@ class Login extends React.Component {
 
   handleLoginSubmit(event) {
     event.preventDefault()
-    this.setState({ isLoggedIn: true })
+    const { email, password } = this.state
+    this.props.logIn(email, password)
   }
 
   handleChangeEmail(event) {
@@ -44,7 +45,7 @@ class Login extends React.Component {
       return
     }
 
-    // Email validation regex (more strict)
+    // Email validation regex
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     const isEmailValid = emailRegex.test(email)
 
@@ -98,6 +99,14 @@ class Login extends React.Component {
       </>
     )
   }
+}
+
+Login.propTypes = {
+  logIn: PropTypes.func,
+}
+
+Login.defaultProps = {
+  logIn: () => {},
 }
 
 export default Login
