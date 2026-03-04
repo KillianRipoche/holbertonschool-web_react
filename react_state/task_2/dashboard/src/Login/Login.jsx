@@ -6,8 +6,8 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      email: '',
-      password: '',
+      email: props.email || '',
+      password: props.password || '',
       enableSubmit: false,
     }
 
@@ -103,10 +103,14 @@ class Login extends React.Component {
 
 Login.propTypes = {
   logIn: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
 }
 
 Login.defaultProps = {
   logIn: () => {},
+  email: '',
+  password: '',
 }
 
 export default Login
