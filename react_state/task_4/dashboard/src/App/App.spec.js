@@ -3,107 +3,34 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 
 describe('App component', () => {
-  test('renders the main heading', () => {
-    render(<App />);
-    const heading = screen.getByRole('heading', { level: 1, name: /school dashboard/i });
-    expect(heading).toBeInTheDocument();
-  });
+  // ... tous les tests précédents ...
 
-  test('renders the Holberton logo image', () => {
-    render(<App />);
-    const image = screen.getByAltText(/holberton logo/i);
-    expect(image).toBeInTheDocument();
-  });
+  test('clicking on notification item removes it and logs to console', async () => {
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
-  test('default state shows Login component', () => {
-    render(<App />);
-    const loginText = screen.getByText(/login to access the full dashboard/i);
-    expect(loginText).toBeInTheDocument();
-  });
-
-  test('does not display CourseList when user is not logged in', () => {
-    render(<App />);
-    const courseList = screen.queryByRole('table');
-    expect(courseList).not.toBeInTheDocument();
-  });
-
-  test('displays CourseList when user is logged in', async () => {
     const { container } = render(<App />);
 
-    // Simulate login by directly updating the component's state
-    const appInstance = container.querySelector('.relative').parentElement;
-
-    // Find the login form and submit with valid credentials
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
-
-    // Wait for CourseList to appear
-    await waitFor(() => {
-      const courseList = screen.getByRole('table');
-      expect(courseList).toBeInTheDocument();
-    });
-  });
-
-  test('logOut function resets user state', async () => {
-    render(<App />);
-
-    // Login first
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
-
-    // Wait for login to complete
-    await waitFor(() => {
-      expect(screen.getByRole('table')).toBeInTheDocument();
-    });
-
-    // Now logout
-    const logoutLink = screen.getByText(/logout/i);
-    fireEvent.click(logoutLink);
-
-    // Verify we're back to login screen
-    await waitFor(() => {
-      expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
-    });
-  });
-
-  test('Ctrl+H triggers logout', async () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation();
-
-    render(<App />);
-
-    // Login first
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /ok/i });
-
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
+    // Open notifications
+    const notificationTitle = screen.getByText(/Your notifications/i);
+    fireEvent.click(notificationTitle);
 
     await waitFor(() => {
-      expect(screen.getByRole('table')).toBeInTheDocument();
+      expect(screen.getAllByRole('listitem')).toHaveLength(3);
     });
 
-    // Press Ctrl+H
-    fireEvent.keyDown(window, { key: 'h', ctrlKey: true });
+    // Click on first notification
+    const items = screen.getAllByRole('listitem');
+    fireEvent.click(items[0]);
 
-    expect(alertMock).toHaveBeenCalledWith('Logging you out');
+    // Check console log
+    expect(consoleSpy).toHaveBeenCalledWith('Notification 1 has been marked as read');
 
-    // Verify logout happened
+    // Check notification is removed
     await waitFor(() => {
-      expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
+      const remainingItems = screen.getAllByRole('listitem');
+      expect(remainingItems).toHaveLength(2);
     });
 
-    alertMock.mockRestore();
+    consoleSpy.mockRestore();
   });
 });

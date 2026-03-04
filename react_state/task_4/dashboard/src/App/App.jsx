@@ -8,7 +8,6 @@ import Footer from '../Footer/Footer'
 import CourseListWithLogging from '../CourseList/CourseList'
 import { getLatestNotification } from '../utils/utils'
 import AppContext from '../Context/context'
-import PropTypes from 'prop-types'
 
 class App extends React.Component {
   constructor(props) {
@@ -21,12 +20,12 @@ class App extends React.Component {
         password: '',
         isLoggedIn: false,
       },
-      notificationsList: [
+      notifications: [
         { id: 1, type: "default", value: "New course available" },
         { id: 2, type: "urgent", value: "New resume available" },
         { id: 3, type: "urgent", html: { __html: getLatestNotification() } },
       ],
-      coursesList: [
+      courses: [
         { id: 1, name: "ES6", credit: 60 },
         { id: 2, name: "Webpack", credit: 20 },
         { id: 3, name: "React", credit: 40 }
@@ -38,6 +37,7 @@ class App extends React.Component {
     this.handleLogout = this.handleLogout.bind(this)
     this.logIn = this.logIn.bind(this)
     this.logOut = this.logOut.bind(this)
+    this.markNotificationAsRead = this.markNotificationAsRead.bind(this)
   }
 
   handleDisplayDrawer() {
@@ -68,6 +68,13 @@ class App extends React.Component {
     })
   }
 
+  markNotificationAsRead(id) {
+    console.log(`Notification ${id} has been marked as read`)
+    this.setState((prevState) => ({
+      notifications: prevState.notifications.filter(notification => notification.id !== id)
+    }))
+  }
+
   handleLogout = (event) => {
     if (event.ctrlKey && event.key === "h") {
       alert('Logging you out')
@@ -84,7 +91,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { displayDrawer, user, notificationsList, coursesList } = this.state
+    const { displayDrawer, user, notifications, courses } = this.state
     const contextValue = {
       user: user,
       logOut: this.logOut,
@@ -94,24 +101,21 @@ class App extends React.Component {
       <AppContext.Provider value={contextValue}>
         <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
           <Notifications
-            notifications={notificationsList}
+            notifications={notifications}
             displayDrawer={displayDrawer}
             handleDisplayDrawer={this.handleDisplayDrawer}
             handleHideDrawer={this.handleHideDrawer}
+            markNotificationAsRead={this.markNotificationAsRead}
           />
           <div className="flex-1">
             <Header />
             {user.isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
-                <CourseListWithLogging courses={coursesList} />
+                <CourseListWithLogging courses={courses} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title="Log in to continue">
-                <Login
-                  logIn={this.logIn}
-                  email={user.email}
-                  password={user.password}
-                />
+                <Login logIn={this.logIn} email={user.email} password={user.password} />
               </BodySectionWithMarginBottom>
             )
             }

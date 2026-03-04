@@ -32,4 +32,21 @@ describe('Notifications', () => {
 
     expect(handleHideDrawer).toHaveBeenCalledTimes(1);
   });
+
+  test('clicking on notification item calls markNotificationAsRead with correct id', () => {
+    const markNotificationAsRead = jest.fn();
+    render(
+      <Notifications
+        displayDrawer={true}
+        notifications={mockNotifications}
+        markNotificationAsRead={markNotificationAsRead}
+      />
+    );
+
+    const items = screen.getAllByRole('listitem');
+    fireEvent.click(items[0]);
+
+    expect(markNotificationAsRead).toHaveBeenCalledTimes(1);
+    expect(markNotificationAsRead).toHaveBeenCalledWith(1);
+  });
 });

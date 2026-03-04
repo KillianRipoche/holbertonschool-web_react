@@ -3,19 +3,9 @@ import NotificationItem from './NotificationItem'
 import closeButton from '../assets/close-button.png'
 import PropTypes from 'prop-types'
 
-class Notifications extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    // Allow re-render if displayDrawer changes or notifications length changes
-    return nextProps.notifications.length !== this.props.notifications.length ||
-           nextProps.displayDrawer !== this.props.displayDrawer
-  }
-
-  markAsRead(id) {
-    console.log(`Notification ${id} has been marked as read`)
-  }
-
+class Notifications extends React.PureComponent {
   render() {
-    const { displayDrawer, notifications, handleDisplayDrawer, handleHideDrawer } = this.props
+    const { displayDrawer, notifications, handleDisplayDrawer, handleHideDrawer, markNotificationAsRead } = this.props
 
     // Condition pour l'animation bounce
     const shouldAnimate = notifications.length > 0 && !displayDrawer
@@ -51,7 +41,7 @@ class Notifications extends React.Component {
                         type={notification.type}
                         value={notification.value}
                         html={notification.html}
-                        markAsRead={this.markAsRead}
+                        markAsRead={() => markNotificationAsRead(notification.id)}
                         id={notification.id}
                       />
                     ))}
@@ -71,13 +61,15 @@ Notifications.propTypes = {
   notifications: PropTypes.array,
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 }
 
 Notifications.defaultProps = {
   displayDrawer: false,
   notifications: [],
-  handleDisplayDrawer: () => {},
-  handleHideDrawer: () => {},
+  handleDisplayDrawer: () => { },
+  handleHideDrawer: () => { },
+  markNotificationAsRead: () => { },
 }
 
 export default Notifications
