@@ -1,12 +1,9 @@
-import { useContext } from 'react'
 import { getCurrentYear, getFooterCopy } from '../utils/utils'
-import AppContext from '../Context/context'
 import PropTypes from 'prop-types'
 
-function Footer({ isIndex = false }) {
+function Footer({ isIndex = false, user = { isLoggedIn: false } }) {
   const currentYear = getCurrentYear()
   const footerCopy = getFooterCopy(isIndex)
-  const { user } = useContext(AppContext)
 
   return (
     <>
@@ -26,6 +23,9 @@ function Footer({ isIndex = false }) {
 
 Footer.propTypes = {
   isIndex: PropTypes.bool,
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+  }),
 }
 
-export default Footer 
+export default Footer

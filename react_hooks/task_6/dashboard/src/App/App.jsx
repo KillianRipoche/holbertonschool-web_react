@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useReducer, useCallback, useEffect } from 'react'
 import axios from 'axios'
 import BodySection from '../BodySection/BodySection'
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom'
@@ -7,18 +7,11 @@ import Header from '../Header/Header'
 import Login from '../Login/Login'
 import Footer from '../Footer/Footer'
 import CourseListWithLogging from '../CourseList/CourseList'
-import AppContext from '../Context/context'
 import { getLatestNotification } from '../utils/utils'
+import { appReducer, initialState, APP_ACTIONS } from './appReducer'
 
 export default function App() {
-  const [displayDrawer, setDisplayDrawer] = useState(true)
-  const [user, setUser] = useState({
-    email: '',
-    password: '',
-    isLoggedIn: false,
-  })
-  const [notifications, setNotifications] = useState([])
-  const [courses, setCourses] = useState([])
+  const [state, dispatch] = useReducer(appReducer, initialState)
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -34,7 +27,10 @@ export default function App() {
           }
           return notif
         })
-        setNotifications(updatedNotifications)
+        dispatch({
+          type: APP_ACTIONS.SET_NOTIFICATIONS,
+          payload: { notifications: updatedNotifications }
+        })
       } catch (error) {
         console.error('Error fetching notifications', error)
       }
@@ -45,80 +41,84 @@ export default function App() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        if (user.isLoggedIn) {
+        if (state.user.isLoggedIn) {
           const response = await axios.get('/courses.json')
-          setCourses(response.data.courses)
+          dispatch({
+            type: APP_ACTIONS.SET_COURSES,
+            payload: { courses: response.data.courses }
+          })
         } else {
-          setCourses([])
+          dispatch({
+            type: APP_ACTIONS.SET_COURSES,
+            payload: { courses: [] }
+          })
         }
       } catch (error) {
         console.error('Error fetching courses', error)
       }
     }
     fetchCourses()
-  }, [user])
+  }, [state.user.isLoggedIn])
 
   const logIn = useCallback((email, password) => {
-    setUser({
-      email: email,
-      password: password,
-      isLoggedIn: true,
+    dispatch({
+      type: APP_ACTIONS.LOGIN,
+      payload: { email, password }
     })
   }, [])
 
   const logOut = useCallback(() => {
-    setUser({
-      email: '',
-      password: '',
-      isLoggedIn: false,
-    })
+    dispatch({ type: APP_ACTIONS.LOGOUT })
   }, [])
 
   const handleDisplayDrawer = useCallback(() => {
-    setDisplayDrawer(true)
-  }, [])
+    if (!state.displayDrawer) {
+      dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER })
+    }
+  }, [state.displayDrawer])
 
   const handleHideDrawer = useCallback(() => {
-    setDisplayDrawer(false)
-  }, [])
+    if (state.displayDrawer) {
+      dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER })
+    }
+  }, [state.displayDrawer])
 
   const markNotificationAsRead = useCallback((id) => {
     console.log(`Notification ${id} has been marked as read`)
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
-    )
+    dispatch({
+      type: APP_ACTIONS.MARK_NOTIFICATION_READ,
+      payload: { id }
+    })
   }, [])
 
   return (
-    <AppContext.Provider value={{ user, logOut }}>
-      <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
-        <Notifications
-          notifications={notifications}
-          displayDrawer={displayDrawer}
-          handleDisplayDrawer={handleDisplayDrawer}
-          handleHideDrawer={handleHideDrawer}
-          markNotificationAsRead={markNotificationAsRead}
-        />
-        <div className="flex-1">
-          <Header />
-          {user.isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseListWithLogging courses={courses} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login logIn={logIn} email={user.email} password={user.password} />
-            </BodySectionWithMarginBottom>
-          )
-          }
-          <BodySection title="News from the School">
-            <p>
-              ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?
-            </p>
-          </BodySection>
-        </div>
-        <Footer />
+    <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
+      <Notifications
+        notifications={state.notifications}
+        displayDrawer={state.displayDrawer}
+        handleDisplayDrawer={handleDisplayDrawer}
+        handleHideDrawer={handleHideDrawer}
+        markNotificationAsRead={markNotificationAsRead}
+      />
+      <div className="flex-1">
+        <Header user={state.user} logOut={logOut} />
+        {state.user.isLoggedIn ? (
+          <BodySectionWithMarginBottom title="Course list">
+            <CourseListWithLogging courses={state.courses} />
+          </BodySectionWithMarginBottom>
+        ) : (
+          <BodySectionWithMarginBottom title="Log in to continue">
+            <Login logIn={logIn} email={state.user.email} password={state.user.password} />
+          </BodySectionWithMarginBottom>
+        )
+        }
+        <BodySection title="News from the School">
+          <p>
+            ipsum Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique, asperiores architecto blanditiis fuga doloribus sit illum aliquid ea distinctio minus accusantium, impedit quo voluptatibus ut magni dicta. Recusandae, quia dicta?
+          </p>
+        </BodySection>
       </div>
-    </AppContext.Provider>
+      <Footer user={state.user} />
+    </div>
   )
 }

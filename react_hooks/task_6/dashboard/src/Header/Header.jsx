@@ -1,10 +1,8 @@
 import { useContext } from 'react'
 import holbertonLogo from '../assets/holberton-logo.jpg'
-import AppContext from '../Context/context'
+import PropTypes from 'prop-types'
 
-function Header() {
-  const { user, logOut } = useContext(AppContext)
-
+function Header({ user = { isLoggedIn: false, email: '' }, logOut = () => {} }) {
   return (
     <>
       <div className="App-header flex items-center py-2 max-[520px]:flex-col">
@@ -18,6 +16,15 @@ function Header() {
       )}
     </>
   )
+}
+
+Header.propTypes = {
+  user: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+    isLoggedIn: PropTypes.bool,
+  }),
+  logOut: PropTypes.func,
 }
 
 export default Header
