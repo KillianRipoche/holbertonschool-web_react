@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import BodySection from '../BodySection/BodySection'
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom'
@@ -69,10 +69,10 @@ function App() {
     )
   }, [])
 
-  const contextValue = {
+  const contextValue = useMemo(() => ({
     user: user,
     logOut: logOut,
-  }
+  }), [user, logOut])
 
   return (
     <AppContext.Provider value={contextValue}>
