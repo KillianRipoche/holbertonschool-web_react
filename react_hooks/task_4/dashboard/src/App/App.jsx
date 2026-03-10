@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import axios from 'axios'
 import BodySection from '../BodySection/BodySection'
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom'
@@ -11,7 +11,7 @@ import AppContext from '../Context/context'
 import { getLatestNotification } from '../utils/utils'
 
 export default function App() {
-  const [displayDrawer, setDisplayDrawer] = useState(false)
+  const [displayDrawer, setDisplayDrawer] = useState(true)
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -20,55 +20,43 @@ export default function App() {
   const [notifications, setNotifications] = useState([])
   const [courses, setCourses] = useState([])
 
-  // Fetch notifications on mount
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get('/notifications.json')
-        const notificationsData = response.data.map(notification => {
-          if (notification.id === 3) {
+        const fetchedNotifications = response.data.notifications
+        const updatedNotifications = fetchedNotifications.map(notif => {
+          if (notif.html && notif.html.__html === "") {
             return {
-              ...notification,
+              ...notif,
               html: { __html: getLatestNotification() }
             }
           }
-          return notification
+          return notif
         })
-        setNotifications(notificationsData)
+        setNotifications(updatedNotifications)
       } catch (error) {
-        console.error('Error fetching notifications:', error)
+        console.error('Error fetching notifications', error)
       }
     }
-
     fetchNotifications()
   }, [])
 
-  // Fetch courses when user authentication changes
   useEffect(() => {
-    if (user.isLoggedIn) {
-      const fetchCourses = async () => {
-        try {
+    const fetchCourses = async () => {
+      try {
+        if (user.isLoggedIn) {
           const response = await axios.get('/courses.json')
-          setCourses(response.data)
-        } catch (error) {
-          console.error('Error fetching courses:', error)
+          setCourses(response.data.courses)
+        } else {
+          setCourses([])
         }
+      } catch (error) {
+        console.error('Error fetching courses', error)
       }
-
-      fetchCourses()
-    } else {
-      // Clear courses when logged out
-      setCourses([])
     }
-  }, [user.isLoggedIn])
-
-  const handleDisplayDrawer = useCallback(() => {
-    setDisplayDrawer(true)
-  }, [])
-
-  const handleHideDrawer = useCallback(() => {
-    setDisplayDrawer(false)
-  }, [])
+    fetchCourses()
+  }, [user])
 
   const logIn = useCallback((email, password) => {
     setUser({
@@ -86,20 +74,23 @@ export default function App() {
     })
   }, [])
 
+  const handleDisplayDrawer = useCallback(() => {
+    setDisplayDrawer(true)
+  }, [])
+
+  const handleHideDrawer = useCallback(() => {
+    setDisplayDrawer(false)
+  }, [])
+
   const markNotificationAsRead = useCallback((id) => {
     console.log(`Notification ${id} has been marked as read`)
-    setNotifications((prevNotifications) =>
+    setNotifications(prevNotifications =>
       prevNotifications.filter(notification => notification.id !== id)
     )
   }, [])
 
-  const contextValue = useMemo(() => ({
-    user: user,
-    logOut: logOut,
-  }), [user, logOut])
-
   return (
-    <AppContext.Provider value={contextValue}>
+    <AppContext.Provider value={{ user, logOut }}>
       <div className="relative px-3 min-h-screen flex flex-col max-[912px]:px-2">
         <Notifications
           notifications={notifications}
