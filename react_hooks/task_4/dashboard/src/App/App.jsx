@@ -8,6 +8,7 @@ import Login from '../Login/Login'
 import Footer from '../Footer/Footer'
 import CourseListWithLogging from '../CourseList/CourseList'
 import AppContext from '../Context/context'
+import { getLatestNotification } from '../utils/utils'
 
 function App() {
   const [displayDrawer, setDisplayDrawer] = useState(false)
@@ -17,26 +18,49 @@ function App() {
     isLoggedIn: false,
   })
   const [notifications, setNotifications] = useState([])
-  const [courses] = useState([
-    { id: 1, name: "ES6", credit: 60 },
-    { id: 2, name: "Webpack", credit: 20 },
-    { id: 3, name: "React", credit: 40 }
-  ])
+  const [courses, setCourses] = useState([])
 
+  // Fetch notifications on mount
   useEffect(() => {
-    axios.get('/notifications.json')
-      .then(response => {
-        setNotifications(response.data)
-      })
-      .catch(error => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('/notifications.json')
+        const notificationsData = response.data.map(notification => {
+          if (notification.id === 3) {
+            return {
+              ...notification,
+              html: { __html: getLatestNotification() }
+            }
+          }
+          return notification
+        })
+        setNotifications(notificationsData)
+      } catch (error) {
         console.error('Error fetching notifications:', error)
-        setNotifications([
-          { id: 1, type: "default", value: "New course available" },
-          { id: 2, type: "urgent", value: "New resume available" },
-          { id: 3, type: "urgent", html: { __html: "<strong>Urgent requirement</strong> - complete by EOD" } },
-        ])
-      })
+      }
+    }
+
+    fetchNotifications()
   }, [])
+
+  // Fetch courses when user authentication changes
+  useEffect(() => {
+    if (user.isLoggedIn) {
+      const fetchCourses = async () => {
+        try {
+          const response = await axios.get('/courses.json')
+          setCourses(response.data)
+        } catch (error) {
+          console.error('Error fetching courses:', error)
+        }
+      }
+
+      fetchCourses()
+    } else {
+      // Clear courses when logged out
+      setCourses([])
+    }
+  }, [user.isLoggedIn])
 
   const handleDisplayDrawer = useCallback(() => {
     setDisplayDrawer(true)
