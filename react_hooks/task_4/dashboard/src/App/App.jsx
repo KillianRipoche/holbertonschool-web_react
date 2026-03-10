@@ -10,7 +10,7 @@ import CourseListWithLogging from '../CourseList/CourseList'
 import AppContext from '../Context/context'
 import { getLatestNotification } from '../utils/utils'
 
-function App() {
+export default function App() {
   const [displayDrawer, setDisplayDrawer] = useState(false)
   const [user, setUser] = useState({
     email: '',
@@ -131,5 +131,3 @@ function App() {
     </AppContext.Provider>
   )
 }
-
-export default App
