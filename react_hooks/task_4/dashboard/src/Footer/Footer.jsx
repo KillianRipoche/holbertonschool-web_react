@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { getCurrentYear, getFooterCopy } from '../utils/utils'
 import AppContext from '../Context/context'
+import PropTypes from 'prop-types'
 
 function Footer({ isIndex = false }) {
   const currentYear = getCurrentYear()
@@ -23,4 +24,8 @@ function Footer({ isIndex = false }) {
   )
 }
 
-export default Footer
+Footer.propTypes = {
+  isIndex: PropTypes.bool,
+}
+
+export default Footer 

@@ -1,9 +1,7 @@
-import React from "react"
-
-function WithLogging(WrappedComponent) {
+export default function WithLogging(WrappedComponent) {
   const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
 
-  return class extends React.Component {
+  class WithLoggingComponent extends React.Component {
     static displayName = `WithLogging(${wrappedComponentName})`
 
     componentDidMount() {
@@ -18,6 +16,6 @@ function WithLogging(WrappedComponent) {
       return <WrappedComponent {...this.props} />
     }
   }
-}
 
-export default WithLogging
+  return WithLoggingComponent
+}
