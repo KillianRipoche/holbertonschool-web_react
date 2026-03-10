@@ -19,13 +19,17 @@ export const initialState = {
 }
 
 export function appReducer(state = initialState, action) {
+  if (!action || !action.type) {
+    return state
+  }
+
   switch (action.type) {
     case APP_ACTIONS.LOGIN:
       return {
         ...state,
         user: {
-          email: action.payload.email,
-          password: action.payload.password,
+          email: action.payload?.email || '',
+          password: action.payload?.password || '',
           isLoggedIn: true,
         },
       }
@@ -51,20 +55,20 @@ export function appReducer(state = initialState, action) {
       return {
         ...state,
         notifications: state.notifications.filter(
-          notification => notification.id !== action.payload.id
+          notification => notification.id !== action.payload?.id
         ),
       }
 
     case APP_ACTIONS.SET_NOTIFICATIONS:
       return {
         ...state,
-        notifications: action.payload.notifications,
+        notifications: action.payload?.notifications || [],
       }
 
     case APP_ACTIONS.SET_COURSES:
       return {
         ...state,
-        courses: action.payload.courses,
+        courses: action.payload?.courses || [],
       }
 
     default:
