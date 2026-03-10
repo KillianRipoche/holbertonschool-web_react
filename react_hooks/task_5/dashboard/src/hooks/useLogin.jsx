@@ -1,23 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export default function useLogin(onLogin) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [enableSubmit, setEnableSubmit] = useState(false)
 
-  useEffect(() => {
+  const validateForm = (emailValue, passwordValue) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    const isEmailValid = emailRegex.test(email)
-    const isPasswordValid = password.length >= 8
-    setEnableSubmit(isEmailValid && isPasswordValid)
-  }, [email, password])
+    const isEmailValid = emailRegex.test(emailValue)
+    const isPasswordValid = passwordValue.length >= 8
+    return isEmailValid && isPasswordValid
+  }
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value)
+    const newEmail = event.target.value
+    setEmail(newEmail)
+    setEnableSubmit(validateForm(newEmail, password))
   }
 
   const handleChangePassword = (event) => {
-    setPassword(event.target.value)
+    const newPassword = event.target.value
+    setPassword(newPassword)
+    setEnableSubmit(validateForm(email, newPassword))
   }
 
   const handleSubmit = (event) => {
