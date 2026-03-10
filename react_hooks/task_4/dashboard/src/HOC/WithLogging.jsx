@@ -1,3 +1,5 @@
+import React from 'react'
+
 export default function WithLogging(WrappedComponent) {
   const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component'
 
@@ -5,11 +7,11 @@ export default function WithLogging(WrappedComponent) {
     static displayName = `WithLogging(${wrappedComponentName})`
 
     componentDidMount() {
-      console.log(`Component ${wrappedComponentName} is mounted`)
+      console.log(`Component ${WithLoggingComponent.displayName} is mounted`)
     }
 
     componentWillUnmount() {
-      console.log(`Component ${wrappedComponentName} is going to unmount`)
+      console.log(`Component ${WithLoggingComponent.displayName} is going to unmount`)
     }
 
     render() {

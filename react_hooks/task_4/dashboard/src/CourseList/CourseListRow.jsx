@@ -1,58 +1,38 @@
-import React from 'react';
-import CourseListRow from "./CourseListRow";
-import WithLogging from '../HOC/WithLogging'
 import PropTypes from 'prop-types';
 
-class CourseList extends React.Component {
-  static defaultProps = {
-    courses: []
-  }
-  render() {
-    const { courses } = this.props
-    if (courses.length === 0) {
+function CourseListRow({ isHeader, textFirstCell, textSecondCell }) {
+  if (isHeader) {
+    if (textSecondCell) {
       return (
-        <div className="w-4/5 mx-auto my-32 h-[29vh] max-[912px]:w-full max-[912px]:my-5">
-          <table id="CourseList" className="w-full border-collapse border border-gray-500">
-            <thead>
-              <CourseListRow textFirstCell="No course available yet" isHeader={true} />
-            </thead>
-          </table>
-        </div>
-      )
-    } else {
-      return (
-        <div className="w-4/5 mx-auto my-32 h-[29vh] max-[912px]:w-full max-[912px]:my-5">
-          <table id="CourseList" className="w-full border-collapse border border-gray-500">
-            <thead>
-              <CourseListRow textFirstCell="Available courses" isHeader={true} />
-              <CourseListRow textFirstCell="Course name" textSecondCell="Credit" isHeader={true} />
-            </thead>
-            <tbody>
-              {courses.map((course) => (
-                <CourseListRow
-                  key={course.id}
-                  textFirstCell={course.name}
-                  textSecondCell={course.credit}
-                  isHeader={false}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )
+        <tr>
+          <th>{textFirstCell}</th>
+          <th>{textSecondCell}</th>
+        </tr>
+      );
     }
+    return (
+      <tr>
+        <th colSpan="2">{textFirstCell}</th>
+      </tr>
+    );
   }
+  return (
+    <tr>
+      <td>{textFirstCell}</td>
+      <td>{textSecondCell}</td>
+    </tr>
+  );
 }
 
-CourseList.propTypes = {
-  courses: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      credit: PropTypes.number,
-    })
-  ),
-}
+CourseListRow.defaultProps = {
+  isHeader: false,
+  textSecondCell: '',
+};
 
-const CourseListWithLogging = WithLogging(CourseList)
-export default CourseListWithLogging
+CourseListRow.propTypes = {
+  isHeader: PropTypes.bool,
+  textFirstCell: PropTypes.string.isRequired,
+  textSecondCell: PropTypes.string,
+};
+
+export default CourseListRow;
