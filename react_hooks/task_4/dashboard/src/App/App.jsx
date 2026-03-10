@@ -10,7 +10,7 @@ import CourseListWithLogging from '../CourseList/CourseList'
 import AppContext from '../Context/context'
 
 function App() {
-  const [displayDrawer, setDisplayDrawer] = useState(true)
+  const [displayDrawer, setDisplayDrawer] = useState(false)
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -23,18 +23,19 @@ function App() {
     { id: 3, name: "React", credit: 40 }
   ])
 
-  // Fetch notifications on mount
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await axios.get('/notifications.json')
+    axios.get('/notifications.json')
+      .then(response => {
         setNotifications(response.data)
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching notifications:', error)
-      }
-    }
-
-    fetchNotifications()
+        setNotifications([
+          { id: 1, type: "default", value: "New course available" },
+          { id: 2, type: "urgent", value: "New resume available" },
+          { id: 3, type: "urgent", html: { __html: "<strong>Urgent requirement</strong> - complete by EOD" } },
+        ])
+      })
   }, [])
 
   const handleDisplayDrawer = useCallback(() => {
