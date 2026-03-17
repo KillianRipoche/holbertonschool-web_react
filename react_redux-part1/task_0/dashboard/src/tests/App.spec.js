@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import mockAxios from 'jest-mock-axios';
-import App from './App';
+import App from '../App'
 
 describe('App component', () => {
   afterEach(() => {

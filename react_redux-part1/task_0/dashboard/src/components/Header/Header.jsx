@@ -1,6 +1,7 @@
 import { useContext } from 'react'
-import holbertonLogo from '../assets/holberton-logo.jpg'
 import PropTypes from 'prop-types'
+import holbertonLogo from '../../assets/holberton-logo.jpg'
+import AppContext from '../../Context/context'
 
 function Header({ user = { isLoggedIn: false, email: '' }, logOut = () => {} }) {
   return (

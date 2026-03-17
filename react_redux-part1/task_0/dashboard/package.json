@@ -12,12 +12,14 @@
 	},
 	"dependencies": {
 		"@fontsource/roboto": "^5.2.9",
+		"@reduxjs/toolkit": "^2.11.2",
 		"@tailwindcss/vite": "4.1.17",
 		"axios": "^1.13.6",
 		"jest-mock-axios": "^4.9.0",
 		"prop-types": "^15.8.1",
 		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
+		"react-dom": "^19.0.0",
+		"react-redux": "^9.2.0"
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.26.9",

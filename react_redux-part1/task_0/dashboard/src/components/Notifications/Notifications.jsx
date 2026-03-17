@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import NotificationItem from './NotificationItem'
-import closeButton from '../assets/close-button.png'
+import closeButton from '../../assets/close-icon.png'
+import NotificationItem from '../NotificationItem/NotificationItem'
 import PropTypes from 'prop-types'
 
 const Notifications = memo(function Notifications({

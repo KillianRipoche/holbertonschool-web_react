@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { getLatestNotification } from '../utils/utils'
+import { getLatestNotification } from '../../utils/utils'
 import PropTypes from 'prop-types'
 
 const NotificationItem = memo(function NotificationItem({
