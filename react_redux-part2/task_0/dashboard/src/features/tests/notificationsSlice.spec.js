@@ -2,8 +2,6 @@ import mockAxios from 'jest-mock-axios';
 import notificationsReducer, {
   fetchNotifications,
   markNotificationAsRead,
-  showDrawer,
-  hideDrawer,
 } from '../notifications/notificationsSlice';
 import { getLatestNotification } from '../../utils/utils';
 
@@ -14,7 +12,6 @@ afterEach(() => {
 describe('notificationsSlice', () => {
   const initialState = {
     notifications: [],
-    displayDrawer: true,
   };
 
   it('should return the correct initial state by default', () => {
@@ -55,22 +52,10 @@ describe('notificationsSlice', () => {
         { id: 1, type: 'default', value: 'New course available' },
         { id: 2, type: 'urgent', value: 'New resume available' },
       ],
-      displayDrawer: true,
     };
 
     const nextState = notificationsReducer(stateWithNotifications, markNotificationAsRead(1));
     expect(nextState.notifications).toHaveLength(1);
     expect(nextState.notifications[0].id).toBe(2);
-  });
-
-  it('should set displayDrawer to true when showDrawer is dispatched', () => {
-    const stateWithHiddenDrawer = { notifications: [], displayDrawer: false };
-    const nextState = notificationsReducer(stateWithHiddenDrawer, showDrawer());
-    expect(nextState.displayDrawer).toBe(true);
-  });
-
-  it('should set displayDrawer to false when hideDrawer is dispatched', () => {
-    const nextState = notificationsReducer(initialState, hideDrawer());
-    expect(nextState.displayDrawer).toBe(false);
   });
 });

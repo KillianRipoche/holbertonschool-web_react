@@ -8,7 +8,7 @@ import { fetchNotifications } from '../../features/notifications/notificationsSl
 
 const defaultPreloaded = {
   auth: { user: { email: '', password: '' }, isLoggedIn: false },
-  notifications: { notifications: [], displayDrawer: true },
+  notifications: { notifications: [] },
   courses: { courses: [] },
 };
 
@@ -52,32 +52,35 @@ test('displays notification items after fetchNotifications API call', async () =
   });
 });
 
-test('sets displayDrawer to false when close button is clicked', () => {
-  const store = renderWithStore({
+test('clicking close button hides the notification drawer', () => {
+  renderWithStore({
     ...defaultPreloaded,
     notifications: {
       notifications: [{ id: 1, type: 'default', value: 'Test notification' }],
-      displayDrawer: true,
     },
   });
 
-  fireEvent.click(screen.getByRole('button', { name: /close/i }));
+  const drawer = screen.getByTestId('notification-drawer');
+  const initialClass = drawer.className;
 
-  expect(store.getState().notifications.displayDrawer).toBe(false);
+  // Show the drawer first
+  fireEvent.click(screen.getByText(/your notifications/i));
+  expect(drawer.className).not.toBe(initialClass);
+
+  // Click close to hide
+  fireEvent.click(screen.getByRole('button', { name: /close/i }));
+  expect(drawer.className).toBe(initialClass);
 });
 
-test('sets displayDrawer to true when "Your notifications" is clicked', () => {
-  const store = renderWithStore({
-    ...defaultPreloaded,
-    notifications: {
-      notifications: [],
-      displayDrawer: false,
-    },
-  });
+test('clicking "Your notifications" shows the notification drawer', () => {
+  renderWithStore();
+
+  const drawer = screen.getByTestId('notification-drawer');
+  const initialClass = drawer.className;
 
   fireEvent.click(screen.getByText(/your notifications/i));
 
-  expect(store.getState().notifications.displayDrawer).toBe(true);
+  expect(drawer.className).not.toBe(initialClass);
 });
 
 test('removes notification from list when it is marked as read', () => {
@@ -88,7 +91,6 @@ test('removes notification from list when it is marked as read', () => {
         { id: 1, type: 'default', value: 'Notification 1' },
         { id: 2, type: 'urgent', value: 'Notification 2' },
       ],
-      displayDrawer: true,
     },
   });
 
